@@ -5,7 +5,8 @@ Compute alternative citation metrics for academic authors using the [OpenAlex AP
 ## Metrics
 
 - **H-index** - standard H-index (verified against OpenAlex's pre-computed value)
-- **Fractional H-index** - each paper's credit = `cited_by_count / num_authors`, then the H-index algorithm is applied to those fractional values
+- **Weighted H-index** - each paper's credit = `1 / num_authors`, cumulative fractional authorship used
+- **Cit-divided H-index** - each paper's value = `cited_by_count / num_authors`, then H-index applied
 
 ## Installation
 
@@ -28,24 +29,30 @@ cp .env.example .env
 
 ```bash
 # By ORCID
-citation-metrics 0000-0002-4375-4346
+citation-metrics 0000-0002-4591-643X
 
 # By OpenAlex ID
-citation-metrics A5023888391
+citation-metrics A5052404353
 
 # With per-paper breakdown
-citation-metrics A5023888391 -v
+citation-metrics A5052404353 -v
 ```
 
 Example output:
 
 ```
-Author: Ken Caldeira (A5023888391)
-Papers: 312
+Author: Ken Caldeira (A5052404353)
+Papers: 304
 
-  H-index (computed):     82
-  H-index (OpenAlex):     82
-  Fractional H-index:     34
+  H-index (computed):          80
+  H-index (OpenAlex):          80
+  H / papers:               0.263  (80 / 304)
+
+  Weighted H-index:            32
+  Weighted H / frac papers: 0.335  (32 / 95.6)
+
+  Cit-divided H-index:         39
+  Cit-divided H / papers:   0.128  (39 / 304)
 ```
 
 ## Testing
