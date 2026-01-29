@@ -1,4 +1,4 @@
-from citation_metrics.metrics import compute_h_index, compute_all_metrics
+from citation_metrics.metrics import compute_h_index, compute_weighted_h_index, compute_all_metrics
 
 
 def test_h_index_basic():
@@ -24,8 +24,47 @@ def test_h_index_single():
 
 
 def test_h_index_unsorted_input():
-    # Should work regardless of input order
     assert compute_h_index([3, 10, 5, 8, 4]) == 4
+
+
+def test_weighted_h_index_single_author_papers():
+    # All single-author: weighted H should equal standard H
+    works = [
+        {"cited_by_count": 10, "num_authors": 1},
+        {"cited_by_count": 8, "num_authors": 1},
+        {"cited_by_count": 5, "num_authors": 1},
+        {"cited_by_count": 4, "num_authors": 1},
+        {"cited_by_count": 3, "num_authors": 1},
+    ]
+    assert compute_weighted_h_index(works) == 4
+
+
+def test_weighted_h_index_multi_author():
+    # Each paper has 2 authors, so each contributes 0.5 to weight
+    # Sorted by citations: [100, 50, 30, 10, 5]
+    # Cumulative weights: [0.5, 1.0, 1.5, 2.0, 2.5]
+    # Candidates: min(0,100)=0, min(1,50)=1, min(1,30)=1, min(2,10)=2, min(2,5)=2
+    # Best = 2
+    works = [
+        {"cited_by_count": 100, "num_authors": 2},
+        {"cited_by_count": 50, "num_authors": 2},
+        {"cited_by_count": 30, "num_authors": 2},
+        {"cited_by_count": 10, "num_authors": 2},
+        {"cited_by_count": 5, "num_authors": 2},
+    ]
+    assert compute_weighted_h_index(works) == 2
+
+
+def test_weighted_h_index_mixed_authors():
+    # Paper 1: 100 citations, 1 author -> weight 1.0, cumW=1.0, candidate=min(1,100)=1
+    # Paper 2: 50 citations, 10 authors -> weight 0.1, cumW=1.1, candidate=min(1,50)=1
+    # Paper 3: 5 citations, 1 author -> weight 1.0, cumW=2.1, candidate=min(2,5)=2
+    works = [
+        {"cited_by_count": 100, "num_authors": 1},
+        {"cited_by_count": 50, "num_authors": 10},
+        {"cited_by_count": 5, "num_authors": 1},
+    ]
+    assert compute_weighted_h_index(works) == 2
 
 
 def test_compute_all_metrics():
@@ -37,19 +76,29 @@ def test_compute_all_metrics():
         {"cited_by_count": 5, "num_authors": 2},
     ]
     metrics = compute_all_metrics(works)
+
     assert metrics["h_index"] == 5
-    # Fractional values: [50, 10, 30, 1, 2.5] -> sorted: [50, 30, 10, 2.5, 1]
-    # h=3 (3 papers with fractional >= 3)
-    assert metrics["fractional_h_index"] == 3
+    assert metrics["h_per_paper"] == 5 / 5
+
+    # Weighted H: sorted by citations desc, weights = [0.5, 0.2, 1.0, 0.1, 0.5]
+    # cumW: [0.5, 0.7, 1.7, 1.8, 2.3]
+    # candidates: min(0,100), min(0,50), min(1,30), min(1,10), min(2,5) = 0,0,1,1,2
+    assert metrics["weighted_h"] == 2
+    # fractional_papers = 0.5 + 0.2 + 1.0 + 0.1 + 0.5 = 2.3
+    assert abs(metrics["weighted_h_per_frac_paper"] - 2 / 2.3) < 1e-9
+
+    # Citation-divided H: values = [50, 10, 30, 1, 2.5] -> sorted: [50, 30, 10, 2.5, 1]
+    # h=3 (3 papers with value >= 3)
+    assert metrics["citdiv_h"] == 3
+    assert abs(metrics["citdiv_h_per_paper"] - 3 / 5) < 1e-9
 
 
 def test_compute_all_metrics_zero_authors():
-    # Works with 0 authors should be excluded from fractional calculation
     works = [
         {"cited_by_count": 10, "num_authors": 0},
         {"cited_by_count": 5, "num_authors": 1},
     ]
     metrics = compute_all_metrics(works)
     assert metrics["h_index"] == 2
-    # Only one work counted for fractional (the one with num_authors=1)
-    assert metrics["fractional_h_index"] == 1
+    assert metrics["citdiv_h"] == 1
+    assert metrics["weighted_h"] == 1

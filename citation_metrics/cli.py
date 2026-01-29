@@ -49,10 +49,29 @@ def main():
 
     metrics = compute_all_metrics(works)
 
+    def fmt(v):
+        """Format as integer if whole, else 1 decimal place."""
+        if v == int(v):
+            return str(int(v))
+        return f"{v:.1f}"
+
+    num_papers = metrics['num_papers']
+    frac_papers = metrics['fractional_papers']
+
+    h = metrics['h_index']
+    wh = metrics['weighted_h']
+    cdh = metrics['citdiv_h']
+
     print()
-    print(f"  H-index (computed):   {metrics['h_index']:>4}")
-    print(f"  H-index (OpenAlex):   {author['h_index_openalex']:>4}")
-    print(f"  Fractional H-index:   {metrics['fractional_h_index']:>4}")
+    print(f"  H-index (computed):        {h:>4}")
+    print(f"  H-index (OpenAlex):        {author['h_index_openalex']:>4}")
+    print(f"  H / papers:              {metrics['h_per_paper']:>6.3f}  ({fmt(h)} / {fmt(num_papers)})")
+    print()
+    print(f"  Weighted H-index:          {wh:>4}")
+    print(f"  Weighted H / frac papers:{metrics['weighted_h_per_frac_paper']:>6.3f}  ({fmt(wh)} / {fmt(frac_papers)})")
+    print()
+    print(f"  Cit-divided H-index:       {cdh:>4}")
+    print(f"  Cit-divided H / papers:  {metrics['citdiv_h_per_paper']:>6.3f}  ({fmt(cdh)} / {fmt(num_papers)})")
 
 
 if __name__ == "__main__":
