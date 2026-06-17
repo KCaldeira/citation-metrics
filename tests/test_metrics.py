@@ -1,8 +1,10 @@
+import math
+
 from citation_metrics.metrics import (
     compute_h_index,
     compute_weighted_h_index,
     compute_all_metrics,
-    compute_citation_aging,
+    compute_citation_lognormal,
 )
 
 
@@ -118,58 +120,81 @@ def _work(work_id, year, counts_by_year, title="t"):
     }
 
 
-def test_citation_aging_window_math():
-    # n=5, pub 2014, current 2026 -> age 12, qualifies (10 <= 12 <= 15)
-    # first  = 2014..2018, second = 2019..2023
-    cby = {2014: 2, 2015: 4, 2016: 6, 2017: 1, 2018: 3,
-           2019: 5, 2020: 2, 2021: 1, 2022: 1, 2023: 1}
-    rows = compute_citation_aging([_work("W1", 2014, cby)], n=5, current_year=2026)
+def test_lognormal_fit_values():
+    # pub 2018, current 2026 (age 8, within 5..15)
+    # ages (with +0.5): 0.5 x1, 1.5 x2, 2.5 x1; N=4
+    rows = compute_citation_lognormal(
+        [_work("W1", 2018, {2018: 1, 2019: 2, 2020: 1})], current_year=2026
+    )
     assert len(rows) == 1
     r = rows[0]
-    assert r["first"] == 2 + 4 + 6 + 1 + 3      # 16
-    assert r["second"] == 5 + 2 + 1 + 1 + 1     # 10
-    assert abs(r["ratio"] - 16 / 10) < 1e-9
+    assert r["n_citations"] == 4
+
+    logs = [math.log(0.5), math.log(1.5), math.log(1.5), math.log(2.5)]
+    mu = sum(logs) / 4
+    var = sum((x - mu) ** 2 for x in logs) / 4
+    assert abs(r["logmean"] - mu) < 1e-9
+    assert abs(r["log_sd"] - math.sqrt(var)) < 1e-9
+    assert abs(r["mode"] - math.exp(mu - var)) < 1e-9
 
 
-def test_citation_aging_age_filter():
-    # 2020 paper: age 6 < 2n=10 -> excluded
+def test_lognormal_skips_few_citations():
+    # only 2 citations total -> skipped
+    rows = compute_citation_lognormal(
+        [_work("W1", 2018, {2018: 1, 2019: 1})], current_year=2026
+    )
+    assert rows == []
+
+
+def test_lognormal_skips_single_year():
+    # all 5 citations in one year -> degenerate, skipped
+    rows = compute_citation_lognormal(
+        [_work("W1", 2018, {2019: 5})], current_year=2026
+    )
+    assert rows == []
+
+
+def test_lognormal_age_filter():
+    # 2023 paper: age 3 < 5 -> excluded
     # 2009 paper: age 17 > 15 -> excluded
     works = [
-        _work("Wyoung", 2020, {2020: 5, 2021: 5}),
-        _work("Wold", 2009, {2010: 5, 2014: 5}),
+        _work("Wyoung", 2023, {2023: 2, 2024: 2, 2025: 2}),
+        _work("Wold", 2009, {2010: 2, 2012: 2, 2014: 2}),
     ]
-    rows = compute_citation_aging(works, n=5, current_year=2026)
+    rows = compute_citation_lognormal(works, current_year=2026)
     assert rows == []
 
 
-def test_citation_aging_infinite_ratio_sorts_first():
-    # second window empty -> inf ratio, must sort to top
-    finite = _work("Wfin", 2014, {2014: 1, 2019: 2})          # ratio 0.5
-    rising = _work("Winf", 2015, {2015: 3})                   # second window empty -> inf
-    rows = compute_citation_aging([finite, rising], n=5, current_year=2026)
-    assert rows[0]["id"] == "Winf"
-    assert rows[0]["ratio"] == float("inf")
-    assert rows[1]["id"] == "Wfin"
-
-
-def test_citation_aging_mean_lag():
-    # pub 2014, cited {2014: 3, 2016: 1} -> (0*3 + 2*1)/4 = 0.5
-    rows = compute_citation_aging(
-        [_work("W1", 2014, {2014: 3, 2016: 1})], n=5, current_year=2026
-    )
-    assert abs(rows[0]["mean_lag"] - 0.5) < 1e-9
-
-
-def test_citation_aging_zero_citations_mean_lag_none():
-    rows = compute_citation_aging(
-        [_work("W1", 2014, {})], n=5, current_year=2026
-    )
-    assert rows[0]["mean_lag"] is None
-    assert rows[0]["ratio"] == float("inf")  # second == 0
-
-
-def test_citation_aging_missing_year_skipped():
-    rows = compute_citation_aging(
-        [_work("W1", None, {2014: 5})], n=5, current_year=2026
+def test_lognormal_missing_year_skipped():
+    rows = compute_citation_lognormal(
+        [_work("W1", None, {2018: 5, 2019: 5})], current_year=2026
     )
     assert rows == []
+
+
+def test_lognormal_pre_publication_citation_clamped():
+    # citation in 2017 precedes pub year 2018 -> age floored to 0.5, no crash
+    rows = compute_citation_lognormal(
+        [_work("W1", 2018, {2017: 1, 2019: 2, 2020: 1})], current_year=2026
+    )
+    assert len(rows) == 1
+    logs = [math.log(0.5), math.log(1.5), math.log(1.5), math.log(2.5)]
+    mu = sum(logs) / 4
+    assert abs(rows[0]["logmean"] - mu) < 1e-9
+
+
+def test_lognormal_skips_degenerate_after_clamp():
+    # 2017 and 2018 both clamp to age 0.5 -> sigma 0 -> skipped
+    rows = compute_citation_lognormal(
+        [_work("W1", 2018, {2017: 2, 2018: 2})], current_year=2026
+    )
+    assert rows == []
+
+
+def test_lognormal_sorted_by_mode_desc():
+    # late-peaking paper should sort before early-peaking paper
+    early = _work("Wearly", 2018, {2018: 5, 2019: 1})       # mass at low age
+    late = _work("Wlate", 2018, {2022: 5, 2023: 1})         # mass at high age
+    rows = compute_citation_lognormal([early, late], current_year=2026)
+    assert [r["id"] for r in rows] == ["Wlate", "Wearly"]
+    assert rows[0]["mode"] > rows[1]["mode"]

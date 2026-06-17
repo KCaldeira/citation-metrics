@@ -1,3 +1,6 @@
+import math
+
+
 def compute_h_index(values):
     """Compute the H-index from a list of numeric values.
 
@@ -35,26 +38,36 @@ def compute_weighted_h_index(works):
     return best_h
 
 
-def compute_citation_aging(works, n, current_year, max_age=15):
-    """Rank papers by how early vs. late citations compare.
+def compute_citation_lognormal(works, current_year, min_age=5, max_age=15):
+    """Fit a log-normal to each paper's citation-age distribution.
 
-    Considers only papers published between max_age and 2*n years ago, i.e.
-    publication year Y with 2*n <= (current_year - Y) <= max_age. The lower
-    bound guarantees a complete second n-year window; the upper bound keeps the
-    paper within OpenAlex's ~15-year counts_by_year coverage.
+    Considers papers published between max_age and min_age years ago, i.e.
+    publication year Y with min_age <= (current_year - Y) <= max_age. The upper
+    bound keeps papers within OpenAlex's ~15-year counts_by_year coverage so the
+    early part of the curve is not truncated.
 
-    For each qualifying paper:
-        - first  = citations in years Y .. Y+n-1 (includes publication year)
-        - second = citations in years Y+n .. Y+2n-1
-        - ratio  = first / second (inf when second == 0)
-        - mean_lag = weighted mean of (citing_year - Y) over all citation years
-                     available for the paper (None when the paper has no citations)
+    A citation in calendar year y is assigned a citation age of
+    max(y - Y, 0) + 0.5 years (the midpoint of the citing year, with any
+    pre-/same-publication-year citation floored to age 0.5), which keeps the
+    age positive so its log is defined. The log-normal maximum-likelihood fit
+    is the weighted mean and standard deviation of ln(age):
+
+        mu     = sum(c * ln(age)) / N
+        sigma  = sqrt(sum(c * (ln(age) - mu)^2) / N)
+
+    Reported per paper:
+        mode   = exp(mu - sigma^2)   # most-likely citation age, in years
+        log_sd = sigma               # shape parameter (std of ln age)
+
+    Papers with fewer than 3 total citations, with all citations in a single
+    year, or whose ages collapse to a single value (sigma == 0) are skipped
+    (the fit would be undefined or degenerate).
 
     Each work is a dict with keys: id, title, publication_year, counts_by_year
     (a dict mapping year -> citation count).
 
-    Returns a list of row dicts sorted by ratio descending, so infinite-ratio
-    papers (no second-window citations) appear first.
+    Returns a list of row dicts sorted by mode descending (latest-peaking
+    papers first).
     """
     rows = []
     for w in works:
@@ -62,30 +75,38 @@ def compute_citation_aging(works, n, current_year, max_age=15):
         if y is None:
             continue
         age = current_year - y
-        if not (2 * n <= age <= max_age):
+        if not (min_age <= age <= max_age):
             continue
 
         cby = w["counts_by_year"]
-        first = sum(c for yr, c in cby.items() if y <= yr <= y + n - 1)
-        second = sum(c for yr, c in cby.items() if y + n <= yr <= y + 2 * n - 1)
-        total = sum(cby.values())
-        mean_lag = (
-            sum((yr - y) * c for yr, c in cby.items()) / total
-            if total else None
-        )
-        ratio = float("inf") if second == 0 else first / second
+        cited_years = [(yr, c) for yr, c in cby.items() if c > 0]
+        total = sum(c for _, c in cited_years)
+        if total < 3:                 # too few citations to fit
+            continue
+        if len(cited_years) < 2:       # all citations in a single year
+            continue
+
+        # citation age (years) at the midpoint of each citing year; pre-/same-
+        # publication-year citations (yr <= Y) are floored to age 0.5
+        samples = [(max(yr - y, 0) + 0.5, c) for yr, c in cited_years]
+        mu = sum(c * math.log(t) for t, c in samples) / total
+        var = sum(c * (math.log(t) - mu) ** 2 for t, c in samples) / total
+        sigma = math.sqrt(var)
+        if sigma == 0:                 # ages collapse to one value -> degenerate
+            continue
+        mode = math.exp(mu - sigma ** 2)
 
         rows.append({
             "id": w["id"],
             "title": w.get("title"),
             "publication_year": y,
-            "first": first,
-            "second": second,
-            "ratio": ratio,
-            "mean_lag": mean_lag,
+            "n_citations": total,
+            "mode": mode,
+            "log_sd": sigma,
+            "logmean": mu,
         })
 
-    rows.sort(key=lambda r: r["ratio"], reverse=True)  # inf sorts to top
+    rows.sort(key=lambda r: r["mode"], reverse=True)
     return rows
 
 

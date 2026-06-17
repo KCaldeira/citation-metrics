@@ -4,62 +4,52 @@ import datetime
 import sys
 
 from citation_metrics.config import get_api_key
-from citation_metrics.metrics import compute_all_metrics, compute_citation_aging
+from citation_metrics.metrics import compute_all_metrics, compute_citation_lognormal
 from citation_metrics.openalex import OpenAlexClient
 
 
-def run_aging(args, author, works):
-    """Compute and display the citation-aging ratio metric."""
-    n = args.window
+def run_lognormal(args, author, works):
+    """Fit a log-normal to each paper's citation-age distribution and report it."""
     current_year = datetime.date.today().year
-    rows = compute_citation_aging(works, n, current_year)
+    min_age, max_age = args.min_age, args.max_age
+    rows = compute_citation_lognormal(works, current_year, min_age, max_age)
 
-    lo, hi = current_year - 15, current_year - 2 * n
+    lo, hi = current_year - max_age, current_year - min_age
     print(
-        f"\nCitation aging (window n={n}): "
-        f"{len(rows)} papers published {lo}–{hi} "
-        f"({2 * n}–15 years ago)"
+        f"\nLog-normal citation-age fit: {len(rows)} papers published "
+        f"{lo}–{hi} ({min_age}–{max_age} years ago)"
     )
     print(
-        "  First = citations in years Y..Y+{0}; Second = years Y+{1}..Y+{2}; "
-        "Ratio = First/Second.".format(n - 1, n, 2 * n - 1)
+        "  Citation age = (citing_year - pub_year) + 0.5 yr. "
+        "Mode = peak citation age (yr); LogSD = sigma of ln(age)."
     )
-
-    def fmt_ratio(r):
-        return "inf" if r == float("inf") else f"{r:.2f}"
-
-    def fmt_lag(x):
-        return "" if x is None else f"{x:.1f}"
+    print("  Skipped: papers with <3 citations or all citations in one year.")
 
     header = (
-        f"  {'Paper ID':<13} {'Pub':>4} {'First':>6} {'Second':>6} "
-        f"{'Ratio':>6} {'MeanLag':>7}  Title"
+        f"  {'Paper ID':<13} {'Pub':>4} {'Cites':>5} {'Mode':>6} {'LogSD':>6}  Title"
     )
     print()
     print(header)
-    print(f"  {'-' * 13} {'-' * 4} {'-' * 6} {'-' * 6} {'-' * 6} {'-' * 7}  {'-' * 5}")
+    print(f"  {'-' * 13} {'-' * 4} {'-' * 5} {'-' * 6} {'-' * 6}  {'-' * 5}")
     for r in rows:
-        title = (r["title"] or "")[:60]
+        title = (r["title"] or "")[:58]
         print(
-            f"  {r['id']:<13} {r['publication_year']:>4} {r['first']:>6} "
-            f"{r['second']:>6} {fmt_ratio(r['ratio']):>6} "
-            f"{fmt_lag(r['mean_lag']):>7}  {title}"
+            f"  {r['id']:<13} {r['publication_year']:>4} {r['n_citations']:>5} "
+            f"{r['mode']:>6.2f} {r['log_sd']:>6.2f}  {title}"
         )
 
-    csv_path = args.csv or f"aging_{author['id']}.csv"
+    csv_path = args.csv or f"lognormal_{author['id']}.csv"
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow([
-            "paper_id", "publication_year",
-            f"citations_first_{n}yr", f"citations_second_{n}yr",
-            "ratio", "mean_lag_years", "title",
+            "paper_id", "publication_year", "n_citations",
+            "mode_years", "log_sd", "logmean", "title",
         ])
         for r in rows:
-            ratio = "inf" if r["ratio"] == float("inf") else round(r["ratio"], 4)
-            mean_lag = "" if r["mean_lag"] is None else round(r["mean_lag"], 3)
             writer.writerow([
-                r["id"], r["publication_year"], r["first"], r["second"],
-                ratio, mean_lag, r["title"] or "",
+                r["id"], r["publication_year"], r["n_citations"],
+                round(r["mode"], 4), round(r["log_sd"], 4),
+                round(r["logmean"], 4), r["title"] or "",
             ])
     print(f"\nWrote {len(rows)} rows to {csv_path}")
 
@@ -81,21 +71,28 @@ def main():
         help="Show per-paper breakdown",
     )
     parser.add_argument(
-        "--aging",
+        "--lognormal",
         action="store_true",
-        help="Compute the citation-aging ratio metric (first n years vs. next n years)",
+        help="Fit a log-normal to each paper's citation-age distribution",
     )
     parser.add_argument(
-        "--window",
+        "--min-age",
         type=int,
         default=5,
         metavar="N",
-        help="Aging window size in years (default: 5)",
+        help="Youngest paper age in years to include (default: 5)",
+    )
+    parser.add_argument(
+        "--max-age",
+        type=int,
+        default=15,
+        metavar="N",
+        help="Oldest paper age in years (default: 15, OpenAlex counts_by_year coverage)",
     )
     parser.add_argument(
         "--csv",
         metavar="PATH",
-        help="CSV output path for --aging (default: aging_<authorid>.csv)",
+        help="CSV output path for --lognormal (default: lognormal_<authorid>.csv)",
     )
     args = parser.parse_args()
 
@@ -113,8 +110,8 @@ def main():
     works = client.get_works(author["id"])
     print(f"Papers: {len(works)}")
 
-    if args.aging:
-        run_aging(args, author, works)
+    if args.lognormal:
+        run_lognormal(args, author, works)
         return
 
     if args.verbose:
