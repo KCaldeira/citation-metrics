@@ -3,13 +3,11 @@ from dotenv import load_dotenv
 
 
 def get_api_key():
-    """Load OpenAlex API key from environment or .env file."""
+    """Load OpenAlex API key from environment or .env file.
+
+    The key is optional: OpenAlex works without one via the free "polite pool"
+    (identified by a mailto). A key only raises rate limits. Returns None when
+    unset so the client falls back to keyless requests.
+    """
     load_dotenv()
-    api_key = os.environ.get("OPENALEX_API_KEY")
-    if not api_key:
-        raise SystemExit(
-            "Error: OPENALEX_API_KEY not set.\n"
-            "Get a free key at https://openalex.org/settings/api\n"
-            "Then set it in a .env file or as an environment variable."
-        )
-    return api_key
+    return os.environ.get("OPENALEX_API_KEY") or None

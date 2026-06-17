@@ -35,6 +35,60 @@ def compute_weighted_h_index(works):
     return best_h
 
 
+def compute_citation_aging(works, n, current_year, max_age=15):
+    """Rank papers by how early vs. late citations compare.
+
+    Considers only papers published between max_age and 2*n years ago, i.e.
+    publication year Y with 2*n <= (current_year - Y) <= max_age. The lower
+    bound guarantees a complete second n-year window; the upper bound keeps the
+    paper within OpenAlex's ~15-year counts_by_year coverage.
+
+    For each qualifying paper:
+        - first  = citations in years Y .. Y+n-1 (includes publication year)
+        - second = citations in years Y+n .. Y+2n-1
+        - ratio  = first / second (inf when second == 0)
+        - mean_lag = weighted mean of (citing_year - Y) over all citation years
+                     available for the paper (None when the paper has no citations)
+
+    Each work is a dict with keys: id, title, publication_year, counts_by_year
+    (a dict mapping year -> citation count).
+
+    Returns a list of row dicts sorted by ratio descending, so infinite-ratio
+    papers (no second-window citations) appear first.
+    """
+    rows = []
+    for w in works:
+        y = w.get("publication_year")
+        if y is None:
+            continue
+        age = current_year - y
+        if not (2 * n <= age <= max_age):
+            continue
+
+        cby = w["counts_by_year"]
+        first = sum(c for yr, c in cby.items() if y <= yr <= y + n - 1)
+        second = sum(c for yr, c in cby.items() if y + n <= yr <= y + 2 * n - 1)
+        total = sum(cby.values())
+        mean_lag = (
+            sum((yr - y) * c for yr, c in cby.items()) / total
+            if total else None
+        )
+        ratio = float("inf") if second == 0 else first / second
+
+        rows.append({
+            "id": w["id"],
+            "title": w.get("title"),
+            "publication_year": y,
+            "first": first,
+            "second": second,
+            "ratio": ratio,
+            "mean_lag": mean_lag,
+        })
+
+    rows.sort(key=lambda r: r["ratio"], reverse=True)  # inf sorts to top
+    return rows
+
+
 def compute_all_metrics(works):
     """Compute all citation metrics from a list of works.
 

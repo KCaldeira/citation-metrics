@@ -1,4 +1,9 @@
-from citation_metrics.metrics import compute_h_index, compute_weighted_h_index, compute_all_metrics
+from citation_metrics.metrics import (
+    compute_h_index,
+    compute_weighted_h_index,
+    compute_all_metrics,
+    compute_citation_aging,
+)
 
 
 def test_h_index_basic():
@@ -102,3 +107,69 @@ def test_compute_all_metrics_zero_authors():
     assert metrics["h_index"] == 2
     assert metrics["citdiv_h"] == 1
     assert metrics["weighted_h"] == 1
+
+
+def _work(work_id, year, counts_by_year, title="t"):
+    return {
+        "id": work_id,
+        "title": title,
+        "publication_year": year,
+        "counts_by_year": counts_by_year,
+    }
+
+
+def test_citation_aging_window_math():
+    # n=5, pub 2014, current 2026 -> age 12, qualifies (10 <= 12 <= 15)
+    # first  = 2014..2018, second = 2019..2023
+    cby = {2014: 2, 2015: 4, 2016: 6, 2017: 1, 2018: 3,
+           2019: 5, 2020: 2, 2021: 1, 2022: 1, 2023: 1}
+    rows = compute_citation_aging([_work("W1", 2014, cby)], n=5, current_year=2026)
+    assert len(rows) == 1
+    r = rows[0]
+    assert r["first"] == 2 + 4 + 6 + 1 + 3      # 16
+    assert r["second"] == 5 + 2 + 1 + 1 + 1     # 10
+    assert abs(r["ratio"] - 16 / 10) < 1e-9
+
+
+def test_citation_aging_age_filter():
+    # 2020 paper: age 6 < 2n=10 -> excluded
+    # 2009 paper: age 17 > 15 -> excluded
+    works = [
+        _work("Wyoung", 2020, {2020: 5, 2021: 5}),
+        _work("Wold", 2009, {2010: 5, 2014: 5}),
+    ]
+    rows = compute_citation_aging(works, n=5, current_year=2026)
+    assert rows == []
+
+
+def test_citation_aging_infinite_ratio_sorts_first():
+    # second window empty -> inf ratio, must sort to top
+    finite = _work("Wfin", 2014, {2014: 1, 2019: 2})          # ratio 0.5
+    rising = _work("Winf", 2015, {2015: 3})                   # second window empty -> inf
+    rows = compute_citation_aging([finite, rising], n=5, current_year=2026)
+    assert rows[0]["id"] == "Winf"
+    assert rows[0]["ratio"] == float("inf")
+    assert rows[1]["id"] == "Wfin"
+
+
+def test_citation_aging_mean_lag():
+    # pub 2014, cited {2014: 3, 2016: 1} -> (0*3 + 2*1)/4 = 0.5
+    rows = compute_citation_aging(
+        [_work("W1", 2014, {2014: 3, 2016: 1})], n=5, current_year=2026
+    )
+    assert abs(rows[0]["mean_lag"] - 0.5) < 1e-9
+
+
+def test_citation_aging_zero_citations_mean_lag_none():
+    rows = compute_citation_aging(
+        [_work("W1", 2014, {})], n=5, current_year=2026
+    )
+    assert rows[0]["mean_lag"] is None
+    assert rows[0]["ratio"] == float("inf")  # second == 0
+
+
+def test_citation_aging_missing_year_skipped():
+    rows = compute_citation_aging(
+        [_work("W1", None, {2014: 5})], n=5, current_year=2026
+    )
+    assert rows == []
