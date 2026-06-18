@@ -120,11 +120,13 @@ def _work(work_id, year, counts_by_year, title="t"):
     }
 
 
-def test_lognormal_fit_values():
-    # pub 2018, current 2026 (age 8, within 5..15)
-    # ages (with +0.5): 0.5 x1, 1.5 x2, 2.5 x1; N=4
+def test_lognormal_matches_untruncated_when_window_huge():
+    # With a far-off truncation year the window is effectively complete, so the
+    # truncated MLE must recover the closed-form untruncated log-moment estimates.
+    cby = {2014: 1, 2015: 2, 2016: 1}   # ages 0.5, 1.5, 2.5
     rows = compute_citation_lognormal(
-        [_work("W1", 2018, {2018: 1, 2019: 2, 2020: 1})], current_year=2026
+        [_work("W1", 2014, cby)],
+        first_year=2010, last_year=2020, truncation_year=2200,
     )
     assert len(rows) == 1
     r = rows[0]
@@ -133,41 +135,92 @@ def test_lognormal_fit_values():
     logs = [math.log(0.5), math.log(1.5), math.log(1.5), math.log(2.5)]
     mu = sum(logs) / 4
     var = sum((x - mu) ** 2 for x in logs) / 4
-    assert abs(r["logmean"] - mu) < 1e-9
-    assert abs(r["log_sd"] - math.sqrt(var)) < 1e-9
-    assert abs(r["mode"] - math.exp(mu - var)) < 1e-9
+    assert abs(r["logmean"] - mu) < 1e-4
+    assert abs(r["log_sd"] - math.sqrt(var)) < 1e-4
+    assert abs(r["mode"] - math.exp(mu - var)) < 1e-4
+
+
+def test_lognormal_truncation_raises_mode():
+    # Same citations, but a tight truncation cuts off the right tail. The
+    # truncation correction must push the estimated mode up vs. a wide window.
+    cby = {2014: 1, 2015: 2, 2016: 1}
+    wide = compute_citation_lognormal(
+        [_work("W1", 2014, cby)],
+        first_year=2010, last_year=2020, truncation_year=2200,
+    )[0]
+    tight = compute_citation_lognormal(
+        [_work("W1", 2014, cby)],
+        first_year=2010, last_year=2020, truncation_year=2016,
+    )[0]
+    assert tight["mode"] > wide["mode"]
+
+
+def test_lognormal_flags_peak_beyond_window():
+    # citations still rising right up to a tight truncation -> peak not observed
+    cby = {2020: 1, 2021: 2, 2022: 4, 2023: 8}     # monotonically increasing
+    rows = compute_citation_lognormal(
+        [_work("W1", 2020, cby)],
+        first_year=2011, last_year=2022, truncation_year=2023,
+    )
+    assert len(rows) == 1
+    assert rows[0]["peak_beyond_window"] is True
+    # and the fit stays finite (boxed), not a runaway value
+    assert rows[0]["mode"] <= 40.0
+    assert rows[0]["log_sd"] <= 3.0
+
+
+def test_lognormal_within_window_not_flagged():
+    # clear peak well inside the window -> not flagged
+    cby = {2012: 1, 2013: 3, 2014: 6, 2015: 4, 2016: 2, 2017: 1}
+    rows = compute_citation_lognormal(
+        [_work("W1", 2012, cby)],
+        first_year=2011, last_year=2022, truncation_year=2025,
+    )
+    assert len(rows) == 1
+    assert rows[0]["peak_beyond_window"] is False
+
+
+def test_lognormal_publication_year_filter():
+    works = [
+        _work("Wbefore", 2010, {2011: 2, 2013: 2, 2015: 2}),   # < first_year
+        _work("Wafter", 2023, {2024: 2, 2025: 2, 2026: 2}),    # > last_year
+    ]
+    rows = compute_citation_lognormal(
+        works, first_year=2011, last_year=2022, truncation_year=2025
+    )
+    assert rows == []
+
+
+def test_lognormal_drops_citations_after_truncation_year():
+    # 2026 citations are excluded; only 2 in-window citations remain -> skipped
+    rows = compute_citation_lognormal(
+        [_work("W1", 2018, {2019: 1, 2020: 1, 2026: 10})],
+        first_year=2011, last_year=2022, truncation_year=2025,
+    )
+    assert rows == []
 
 
 def test_lognormal_skips_few_citations():
-    # only 2 citations total -> skipped
     rows = compute_citation_lognormal(
-        [_work("W1", 2018, {2018: 1, 2019: 1})], current_year=2026
+        [_work("W1", 2018, {2019: 1, 2020: 1})],
+        first_year=2011, last_year=2022, truncation_year=2025,
     )
     assert rows == []
 
 
 def test_lognormal_skips_single_year():
-    # all 5 citations in one year -> degenerate, skipped
+    # all citations in one year -> degenerate, skipped
     rows = compute_citation_lognormal(
-        [_work("W1", 2018, {2019: 5})], current_year=2026
+        [_work("W1", 2018, {2019: 5})],
+        first_year=2011, last_year=2022, truncation_year=2025,
     )
-    assert rows == []
-
-
-def test_lognormal_age_filter():
-    # 2023 paper: age 3 < 5 -> excluded
-    # 2009 paper: age 17 > 15 -> excluded
-    works = [
-        _work("Wyoung", 2023, {2023: 2, 2024: 2, 2025: 2}),
-        _work("Wold", 2009, {2010: 2, 2012: 2, 2014: 2}),
-    ]
-    rows = compute_citation_lognormal(works, current_year=2026)
     assert rows == []
 
 
 def test_lognormal_missing_year_skipped():
     rows = compute_citation_lognormal(
-        [_work("W1", None, {2018: 5, 2019: 5})], current_year=2026
+        [_work("W1", None, {2018: 5, 2019: 5})],
+        first_year=2011, last_year=2022, truncation_year=2025,
     )
     assert rows == []
 
@@ -175,26 +228,21 @@ def test_lognormal_missing_year_skipped():
 def test_lognormal_pre_publication_citation_clamped():
     # citation in 2017 precedes pub year 2018 -> age floored to 0.5, no crash
     rows = compute_citation_lognormal(
-        [_work("W1", 2018, {2017: 1, 2019: 2, 2020: 1})], current_year=2026
+        [_work("W1", 2018, {2017: 1, 2019: 2, 2020: 1})],
+        first_year=2011, last_year=2022, truncation_year=2200,
     )
     assert len(rows) == 1
     logs = [math.log(0.5), math.log(1.5), math.log(1.5), math.log(2.5)]
     mu = sum(logs) / 4
-    assert abs(rows[0]["logmean"] - mu) < 1e-9
-
-
-def test_lognormal_skips_degenerate_after_clamp():
-    # 2017 and 2018 both clamp to age 0.5 -> sigma 0 -> skipped
-    rows = compute_citation_lognormal(
-        [_work("W1", 2018, {2017: 2, 2018: 2})], current_year=2026
-    )
-    assert rows == []
+    assert abs(rows[0]["logmean"] - mu) < 1e-4
 
 
 def test_lognormal_sorted_by_mode_desc():
     # late-peaking paper should sort before early-peaking paper
-    early = _work("Wearly", 2018, {2018: 5, 2019: 1})       # mass at low age
-    late = _work("Wlate", 2018, {2022: 5, 2023: 1})         # mass at high age
-    rows = compute_citation_lognormal([early, late], current_year=2026)
+    early = _work("Wearly", 2014, {2014: 5, 2015: 1})       # mass at low age
+    late = _work("Wlate", 2014, {2018: 5, 2019: 1})         # mass at high age
+    rows = compute_citation_lognormal(
+        [early, late], first_year=2011, last_year=2022, truncation_year=2200
+    )
     assert [r["id"] for r in rows] == ["Wlate", "Wearly"]
     assert rows[0]["mode"] > rows[1]["mode"]

@@ -1,6 +1,5 @@
 import argparse
 import csv
-import datetime
 import sys
 
 from citation_metrics.config import get_api_key
@@ -10,32 +9,33 @@ from citation_metrics.openalex import OpenAlexClient
 
 def run_lognormal(args, author, works):
     """Fit a log-normal to each paper's citation-age distribution and report it."""
-    current_year = datetime.date.today().year
-    min_age, max_age = args.min_age, args.max_age
-    rows = compute_citation_lognormal(works, current_year, min_age, max_age)
+    first_year, last_year = args.first_year, args.last_year
+    truncation_year = args.truncation_year
+    rows = compute_citation_lognormal(works, first_year, last_year, truncation_year)
 
-    lo, hi = current_year - max_age, current_year - min_age
     print(
-        f"\nLog-normal citation-age fit: {len(rows)} papers published "
-        f"{lo}–{hi} ({min_age}–{max_age} years ago)"
+        f"\nLog-normal citation-age fit (right-truncated MLE): {len(rows)} papers "
+        f"published {first_year}–{last_year}, citations through {truncation_year}"
     )
     print(
         "  Citation age = (citing_year - pub_year) + 0.5 yr. "
         "Mode = peak citation age (yr); LogSD = sigma of ln(age)."
     )
-    print("  Skipped: papers with <3 citations or all citations in one year.")
+    print("  Skipped: papers with <3 in-window citations or all in one year.")
+    print("  * = peak beyond observed window (still rising; mode is a lower bound).")
 
     header = (
-        f"  {'Paper ID':<13} {'Pub':>4} {'Cites':>5} {'Mode':>6} {'LogSD':>6}  Title"
+        f"  {'Paper ID':<13} {'Pub':>4} {'Cites':>5} {'Mode':>7} {'LogSD':>6}  Title"
     )
     print()
     print(header)
-    print(f"  {'-' * 13} {'-' * 4} {'-' * 5} {'-' * 6} {'-' * 6}  {'-' * 5}")
+    print(f"  {'-' * 13} {'-' * 4} {'-' * 5} {'-' * 7} {'-' * 6}  {'-' * 5}")
     for r in rows:
         title = (r["title"] or "")[:58]
+        mode = f"{r['mode']:.2f}" + ("*" if r["peak_beyond_window"] else "")
         print(
             f"  {r['id']:<13} {r['publication_year']:>4} {r['n_citations']:>5} "
-            f"{r['mode']:>6.2f} {r['log_sd']:>6.2f}  {title}"
+            f"{mode:>7} {r['log_sd']:>6.2f}  {title}"
         )
 
     csv_path = args.csv or f"lognormal_{author['id']}.csv"
@@ -43,13 +43,13 @@ def run_lognormal(args, author, works):
         writer = csv.writer(f)
         writer.writerow([
             "paper_id", "publication_year", "n_citations",
-            "mode_years", "log_sd", "logmean", "title",
+            "mode_years", "log_sd", "logmean", "peak_beyond_window", "title",
         ])
         for r in rows:
             writer.writerow([
                 r["id"], r["publication_year"], r["n_citations"],
                 round(r["mode"], 4), round(r["log_sd"], 4),
-                round(r["logmean"], 4), r["title"] or "",
+                round(r["logmean"], 4), r["peak_beyond_window"], r["title"] or "",
             ])
     print(f"\nWrote {len(rows)} rows to {csv_path}")
 
@@ -76,18 +76,26 @@ def main():
         help="Fit a log-normal to each paper's citation-age distribution",
     )
     parser.add_argument(
-        "--min-age",
+        "--first-year",
         type=int,
-        default=5,
-        metavar="N",
-        help="Youngest paper age in years to include (default: 5)",
+        default=2011,
+        metavar="YEAR",
+        help="Earliest publication year to include (default: 2011)",
     )
     parser.add_argument(
-        "--max-age",
+        "--last-year",
         type=int,
-        default=15,
-        metavar="N",
-        help="Oldest paper age in years (default: 15, OpenAlex counts_by_year coverage)",
+        default=2022,
+        metavar="YEAR",
+        help="Latest publication year to include (default: 2022)",
+    )
+    parser.add_argument(
+        "--truncation-year",
+        type=int,
+        default=2025,
+        metavar="YEAR",
+        help="Last citation year treated as complete; later years are excluded "
+             "and the fit is right-truncated here (default: 2025)",
     )
     parser.add_argument(
         "--csv",

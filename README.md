@@ -65,42 +65,55 @@ Papers: 304
 
 ## Log-normal citation-age fit
 
-Fits a log-normal to each paper's distribution of citation ages and reports, per paper,
-the **mode** (most-likely citation age, in years) and the **log standard deviation**
-(sigma of `ln(age)`). Results print as a table and are written to a CSV
-(`lognormal_<authorid>.csv`).
+Fits a **right-truncated log-normal** to each paper's distribution of citation ages and
+reports, per paper, the **mode** (most-likely citation age, in years) and the **log
+standard deviation** (sigma of `ln(age)`). Results print as a table and are written to a
+CSV (`lognormal_<authorid>.csv`).
 
 ```bash
 citation-metrics A5052404353 --lognormal
 
-# Tune the age band and output path
-citation-metrics A5052404353 --lognormal --min-age 5 --max-age 15 --csv out.csv
+# Tune the publication-year window, truncation year, and output path
+citation-metrics A5052404353 --lognormal \
+    --first-year 2011 --last-year 2022 --truncation-year 2025 --csv out.csv
 ```
 
 How it works:
 
-- **Papers considered**: published `--min-age` to `--max-age` years ago (default 5-15).
-  The upper bound keeps each paper within OpenAlex's ~15-year `counts_by_year` coverage so
-  the early part of the curve is not truncated.
+- **Papers considered**: publication year in `[--first-year, --last-year]`
+  (default 2011-2022).
+- **Truncation**: only citations in years `<= --truncation-year` (default 2025) are used,
+  so the incomplete most-recent year(s) are excluded.
 - **Citation age**: a citation in calendar year `y` for a paper published in year `Y` is
-  assigned an age of `max(y - Y, 0) + 0.5` years (the midpoint of the citing year;
-  pre-/same-publication-year citations are floored to 0.5 so the log is defined).
-- **Fit**: closed-form log-normal maximum-likelihood estimate (weighted mean and standard
-  deviation of `ln(age)`); `mode = exp(mu - sigma^2)`. No SciPy dependency.
-- **Skipped**: papers with fewer than 3 citations, all citations in a single year, or a
-  degenerate fit (`sigma == 0`).
+  assigned an age of `max(y - Y, 0) + 0.5` years (the midpoint of the citing year, treating
+  `Y` as the start of the publication year; pre-/same-publication-year citations are floored
+  to 0.5 so the log is defined).
+- **Fit**: the log-normal parameters are estimated by maximizing the **right-truncated**
+  likelihood (each observation weighted by `f(t) / F(trunc_age)`, with the truncation age
+  `trunc_age = (truncation_year - Y) + 1`). This corrects the downward bias an uncorrected
+  fit would have for younger papers whose right tail extends beyond the observation window.
+  Implemented in pure Python (normal CDF via `math.erf`, Nelder-Mead optimizer); no SciPy
+  or NumPy dependency.
+- **`peak_beyond_window` flag (`*`)**: when citations are still rising at the truncation
+  boundary the truncated fit is non-identifiable; the search is boxed to a plausible region
+  and such papers are flagged. For them the reported mode is a **lower bound**, not a
+  reliable point estimate.
+- **Skipped**: papers with fewer than 3 in-window citations, all in-window citations in a
+  single year, or a degenerate fit.
 
 Example output:
 
 ```
-Log-normal citation-age fit: 116 papers published 2011-2021 (5-15 years ago)
+Log-normal citation-age fit (right-truncated MLE): 125 papers published 2011–2022, citations through 2025
   Citation age = (citing_year - pub_year) + 0.5 yr. Mode = peak citation age (yr); LogSD = sigma of ln(age).
-  Skipped: papers with <3 citations or all citations in one year.
+  Skipped: papers with <3 in-window citations or all in one year.
+  * = peak beyond observed window (still rising; mode is a lower bound).
 
-  Paper ID       Pub Cites   Mode  LogSD  Title
-  ------------- ---- ----- ------ ------  -----
-  W1097101551   2015   128   5.49   0.45  Impacts of global warming on residential heating and cooli
-  W2046376516   2011   185   5.34   0.54  Dependence of climate forcing and response on the altitude
+  Paper ID       Pub Cites    Mode  LogSD  Title
+  ------------- ---- ----- ------- ------  -----
+  W2093693868   2014   223  40.00*   1.73  Global and regional trends in greenhouse gas emissions fro
+  ...
+  W2029454019   2013   140    9.01   1.17  Effect of Temperature on Photosynthesis and Growth in Mari
   ...
 ```
 
