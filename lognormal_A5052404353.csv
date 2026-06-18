@@ -1,126 +1,126 @@
-paper_id,publication_year,n_citations,mode_years,log_sd,logmean,peak_beyond_window,title
-W2093693868,2014,223,40.0,1.729,6.6784,True,Global and regional trends in greenhouse gas emissions from livestock
-W2619921079,2017,17,40.0,1.5257,6.0166,True,Will the use of a carbon tax for revenue generation produce an incentive to continue carbon emissions?
-W2068342401,2014,66,40.0,1.7606,6.7887,True,Natural climate variability and future climate policy
-W3015060218,2020,20,40.0,2.0193,7.7665,True,A Model‐Based Investigation of Terrestrial Plant Carbon Uptake Response to Four Radiation Modification Approaches
-W2020215002,2015,27,40.0,2.9735,12.5308,True,Atmospheric consequences of disruption of the ocean thermocline
-W2166051013,2014,44,40.0,2.3556,9.2378,True,Methods for attributing land-use emissions to products
-W1804140002,2011,60,34.5726,3.0,12.5431,True,Why is there a short-term increase in global precipitation in response to diminished CO<sub>2</sub>forcing?
-W2925259354,2019,73,14.5875,1.9126,6.3382,True,The impact of climate change on fertility*
-W1097101551,2015,122,13.1055,1.0722,3.7226,True,Impacts of global warming on residential heating and cooling degree-days in the United States
-W2291098356,2016,386,11.0496,2.7222,9.8127,True,Reversal of ocean acidification enhances net coral reef calcification
-W2811133697,2018,2090,9.0484,1.0853,3.3804,True,Net-zero emissions energy systems
-W2029454019,2013,140,9.0117,1.1686,3.5641,False,Effect of Temperature on Photosynthesis and Growth in Marine Synechococcus spp.
-W3007956365,2020,28,8.7537,3.0,11.1695,True,Evaluating hypoxia alleviation through induced downwelling
-W4247620229,2021,38,8.1362,1.3763,3.9905,True,Meteorology and climatology of historical weekly wind and solar power resource droughts over western North America in ERA5
-W2100674544,2011,111,7.998,1.3129,3.8029,False,Climate forcing and response to idealized changes in surface latent and sensible heat
-W3207640265,2021,259,7.9812,1.0201,3.1178,True,Geophysical constraints on the reliability of solar and wind power worldwide
-W1793424511,2012,41,7.4852,2.2323,6.9961,False,Geoengineering: Whiter skies?
-W2098840095,2012,165,7.2783,1.4665,4.1355,False,Geophysical limits to global wind power
-W2076148053,2013,93,7.1421,1.4233,3.9919,False,Attributing the increase in atmospheric CO2 to emitters and absorbers
-W3047366598,2020,484,6.4499,1.1364,3.1555,True,Role of Long-Duration Energy Storage in Variable Renewable Electricity Systems
-W2110761353,2014,252,6.2081,1.008,2.8419,False,Maximum warming occurs about one decade after a carbon dioxide emission
-W2046376516,2011,183,6.1188,0.8379,2.5134,False,Dependence of climate forcing and response on the altitude of black carbon aerosols
-W3089422816,2020,35,5.9233,0.9929,2.7648,False,Climate effects of China’s efforts to improve its air quality
-W1845614755,2015,143,5.6014,0.9304,2.5886,False,Climate benefits of natural gas as a bridge fuel and potential delay of near-zero energy systems
-W3115812060,2020,18,5.3469,0.4533,1.882,False,Climate More Responsive to Marine Cloud Brightening Than Ocean Albedo Modification: A Model Study
-W2044269414,2011,459,5.3379,0.9062,2.496,False,The supply chain of CO <sub>2</sub> emissions
-W2983830329,2019,29,5.1747,0.9153,2.4816,False,Photo-movement in the sea anemone Aiptasia influenced by light quality and symbiotic association
-W1703230271,2011,53,5.1746,0.9795,2.6031,False,The frequency response of temperature and precipitation in a climate model
-W3137223864,2021,23,5.0393,1.6543,4.3541,True,Unexpected role of communities colonizing dead coral substrate in the calcification of coral reefs
-W2143872408,2013,37,5.0358,1.7041,4.5205,False,Climate response to imposed solar radiation reductions in high latitudes
-W2155214415,2013,53,4.8308,1.0592,2.6969,False,Nitrogen deposition: how important is it for global terrestrial carbon uptake?
-W2788184393,2018,308,4.7412,1.3056,3.261,False,Geophysical constraints on the reliability of solar and wind power in the United States
-W2508189370,2016,22,4.6965,0.6221,1.9338,False,Greenhouse Gas Emissions Due to Meat Production in the Last Fifty Years
-W2162096236,2012,14,4.5798,0.7946,2.153,False,Avoiding mangrove destruction by avoiding carbon dioxide emissions
-W2529760069,2016,12,4.5761,0.8235,2.199,False,Adapting to rates versus amounts of climate change: a case of adaptation to sea-level rise
-W2092072317,2013,111,4.3561,1.0239,2.52,False,Projections of the pace of warming following an abrupt increase in atmospheric carbon dioxide concentration
-W3094610577,2020,15,4.3427,1.3425,3.2707,False,Climate change as an incentive for future human migration
-W2885862515,2018,140,4.2592,0.6799,1.9114,False,Divergent global-scale temperature effects from identical aerosols emitted in different regions
-W3175494581,2021,36,4.2407,1.2084,2.9051,False,Spatial constraints in large-scale expansion of wind power plants
-W2178889352,2015,99,4.2105,1.4133,3.4351,False,Long-term response of oceans to CO2 removal from the atmosphere
-W2158006323,2015,102,4.1223,0.6926,1.8961,False,Coral reef metabolism and carbon chemistry dynamics of a coral reef flat
-W2889872645,2018,791,4.083,0.9066,2.2288,False,Country-level social cost of carbon
-W2907417922,2018,33,4.0629,0.4359,1.5919,False,Reduced emissions through climate damage to the economy
-W2045662683,2015,43,4.0423,2.976,10.2536,False,Atmospheric impacts of sea ice decline in CO2 induced global warming
-W1964220360,2011,48,4.0392,0.6674,1.8415,False,Coupled climate–carbon simulations indicate minor global effects of wars and epidemics on atmospheric CO <sub>2</sub> between <scp>ad</scp> 800 and 1850
-W2119534125,2013,120,4.033,1.0437,2.4838,False,Strategic incentives for climate geoengineering coalitions to exclude broad participation
-W2898401736,2018,35,3.9415,1.0206,2.4131,False,Comparison of the Fast and Slow Climate Response to Three Radiation Management Geoengineering Schemes
-W2887947886,2018,67,3.8053,0.5679,1.6589,False,The efficacy of aerosol–cloud radiative perturbations from near-surface emissions in deep open-cell stratocumuli
-W2925057469,2019,11,3.7929,0.3412,1.4495,False,Author Correction: Country-level social cost of carbon
-W2068047583,2014,77,3.7668,0.6572,1.7581,False,Modeling of solar radiation management: a comparison of simulations using reduced solar constant and stratospheric sulphate aerosols
-W2955480378,2019,739,3.6534,1.0236,2.3433,False,Committed emissions from existing energy infrastructure jeopardize 1.5 °C climate target
-W3011155179,2020,24,3.6415,1.1368,2.5846,False,Responses of sea urchin larvae to field and laboratory acidification
-W2103002650,2012,110,3.5901,0.8225,1.9546,False,Management of trade-offs in geoengineering through optimal choice of non-uniform radiative forcing
-W2100491050,2014,17,3.5698,0.8732,2.0349,False,Estimating the Contribution of Sea Ice Response to Climate Sensitivity in a Climate Model
-W2911927510,2019,4,3.5548,0.3205,1.371,False,Carbon Isotopic Fractionation in Organic Matter Production Consistent With Benthic Community Composition Across a Coral Reef Flat
-W2762861826,2017,67,3.4367,0.8317,1.9262,False,Geophysical potential for wind energy over the open oceans
-W2885213158,2018,58,3.4295,0.5709,1.5584,False,Global and Arctic climate sensitivity enhanced by changes in North Pacific heat flux
-W2016607514,2014,88,3.2915,1.1508,2.5157,False,Solar geoengineering to limit the rate of temperature change
-W2142213164,2014,80,3.281,1.16,2.5338,False,CH <sub>4</sub> and N <sub>2</sub> O emissions embodied in international trade of meat
-W2945001263,2019,36,3.2463,0.8255,1.8589,False,Climate system response to stratospheric sulfate aerosols: sensitivity to altitude of aerosol layer
-W2772896719,2017,323,3.2287,0.7051,1.6692,False,Greater future global warming inferred from Earth’s recent energy budget
-W1993208092,2015,29,3.1748,1.6906,4.0135,False,Impacts of ocean albedo alteration on Arctic sea ice restoration and Northern Hemisphere climate
-W1905430927,2013,320,3.1681,1.4618,3.2901,False,Climate model response from the Geoengineering Model Intercomparison Project (GeoMIP)
-W2041362028,2011,52,3.151,0.6968,1.6332,False,Can we test geoengineering?
-W3011998440,2019,132,3.1413,0.7996,1.784,False,The Ocean as a Solution to Climate Change: Five Opportunities for Action
-W2999702683,2020,15,3.067,1.4476,3.2163,False,The Climatic Effects of Hygroscopic Growth of Sulfate Aerosols in the Stratosphere
-W2316420616,2016,36,3.0525,0.6685,1.5629,False,Why must a solar forcing be larger than a CO <sub>2</sub> forcing to cause the same global mean surface temperature change?
-W2614248593,2017,46,2.9904,0.7927,1.7237,False,Evaluating relative benefits of different types of R&amp;D for clean energy technologies
-W2056736723,2014,46,2.9111,0.6584,1.502,False,"Community calcification in Lizard Island, Great Barrier Reef: A 33 year perspective"
-W2126237691,2012,81,2.9078,0.9197,1.9133,False,Carbon turnover rates in the One Tree Island reef: A 40‐year perspective
-W2885645393,2018,85,2.9044,0.7177,1.5813,False,Expected limits on the ocean acidification buffering potential of a temperate seagrass meadow
-W3086306797,2020,21,2.8898,0.4472,1.2612,False,Would firm generators facilitate or deter variable renewable energy in a carbon-free electricity system?
-W2172949346,2015,27,2.8774,0.9098,1.8846,False,Fast and slow climate responses to CO<sub>2</sub> and solar forcing: A linear multivariate regression model characterizing transient climate change
-W2739200690,2017,49,2.8579,0.8618,1.7928,False,Simultaneous stabilization of global temperature and precipitation through cocktail geoengineering
-W2165473104,2012,118,2.7586,1.1302,2.292,False,Climate response to changes in atmospheric carbon dioxide and solar irradiance on the time scale of days to weeks
-W2965418441,2019,22,2.7544,0.4138,1.1845,False,Climate Response to Pulse Versus Sustained Stratospheric Aerosol Forcing
-W3043660579,2020,16,2.731,0.689,1.4795,False,A 32-million year cycle detected in sea-level fluctuations over the last 545 Myr
-W3205902264,2021,3,2.7273,0.1588,1.0285,False,Portfolios all the way down …
-W2783110481,2018,33,2.707,1.9841,4.9326,False,Widespread persistent changes to temperature extremes occurred earlier than predicted
-W2559815628,2016,6,2.6388,0.9929,1.9561,False,Spatial Distribution of Generation of Lorenz’s Available Potential Energy in a Global Climate Model
-W1990486347,2012,133,2.6316,0.8529,1.6949,False,A short-term in situ CO2 enrichment experiment on Heron Island (GBR)
-W1995346451,2013,4,2.5644,0.8847,1.7245,False,Prudence on solar climate engineering
-W2164573249,2012,86,2.5573,3.0,9.939,False,Ecosystem Impacts of Geoengineering: A Review for Developing a Science Plan
-W4213267136,2022,96,2.5551,1.139,2.2355,False,Stylized least-cost analysis of flexible nuclear power in deeply decarbonized electricity systems considering wind and solar resources worldwide
-W2090023600,2013,18,2.5487,0.7913,1.5618,False,Climate response due to carbonaceous aerosols and aerosol-induced SST effects in NCAR community atmospheric model CAM3.5
-W2898101520,2018,38,2.5485,0.7717,1.5311,False,Assumptions for emergent constraints
-W2975412290,2019,44,2.5339,0.7806,1.5391,False,Living coral tissue slows skeletal dissolution related to ocean acidification
-W3005963286,2020,8,2.5245,0.6234,1.3146,False,Empirical Prediction of Short‐Term Annual Global Temperature Variability
-W2178610508,2015,135,2.5221,0.9352,1.7997,False,Combustion of available fossil fuel resources sufficient to eliminate the Antarctic Ice Sheet
-W1594164258,2015,62,2.4799,0.814,1.5708,False,Six Month In Situ High-Resolution Carbonate Chemistry and Temperature Study on a Coral Reef Flat Reveals Asynchronous pH and Temperature Anomalies
-W3081397028,2020,57,2.4676,0.9238,1.7567,False,Effects of Deep Reductions in Energy Storage Costs on Highly Reliable Wind and Solar Electricity Systems
-W1965663041,2013,85,2.4487,0.8763,1.6635,False,Risks to coral reefs from ocean carbonate chemistry changes in recent earth system model projections
-W2522765912,2016,101,2.4481,1.0226,1.9411,False,Dependence of global radiative feedbacks on evolving patterns of surface heat fluxes
-W4293259853,2022,12,2.4317,0.4339,1.0768,False,Idealized analysis of relative values of bidirectional versus unidirectional electric vehicle charging in deeply decarbonized electricity systems
-W2516452788,2016,28,2.3765,0.9969,1.8594,False,"Quantifying expert consensus against the existence of a secret, large-scale atmospheric spraying program"
-W3028615387,2020,69,2.3546,1.0591,1.9781,False,Developing reliable hourly electricity demand data through screening and imputation
-W3175390284,2021,90,2.344,0.7995,1.4911,False,Opportunities for flexible electricity loads such as hydrogen production from curtailed generation
-W2723344177,2017,341,2.3207,0.8723,1.6028,False,"Evaluation of a proposal for reliable low-cost grid power with 100% wind, water, and solar"
-W2027334164,2012,46,2.2876,1.5299,3.1679,False,Attribution of atmospheric CO <sub>2</sub> and temperature increases to regions: importance of preindustrial land use change
-W4281751737,2022,33,2.2484,1.1333,2.0947,False,Guiding the deployment of electric vehicles in the developing world
-W2010698719,2011,9,2.237,0.6412,1.2163,False,Comment on “Atmospheric <i>P</i> <scp>co</scp> <sub>2</sub> Perturbations Associated with the Central Atlantic Magmatic Province”
-W2783159541,2018,124,2.1783,1.1279,2.0507,False,Taking the metabolic pulse of the world’s coral reefs
-W2289721959,2016,14,2.1765,0.5399,1.0693,False,Simulated long‐term climate response to idealized solar geoengineering
-W2969843139,2019,17,2.1645,0.9463,1.6677,False,Induced Energy-Saving Efficiency Improvements Amplify Effectiveness of Climate Change Mitigation
-W3096279129,2020,37,2.0932,0.5918,1.0889,False,Atmospheric pressure gradients and Coriolis forces provide geophysical limits to power density of large wind farms
-W2787701140,2018,30,1.9478,1.4998,2.9161,False,Does shortwave absorption by methane influence its effectiveness?
-W2094132477,2012,130,1.9073,2.6333,7.5799,False,Crop yields in a geoengineered climate
-W2792232334,2018,162,1.9027,1.3576,2.4863,False,Carbon dioxide addition to coral reef waters suppresses net community calcification
-W4214901850,2022,119,1.8739,1.2905,2.2935,False,The role of concentrated solar power with thermal energy storage in least-cost highly reliable electricity systems fully powered by variable renewable energy
-W4220772083,2022,6,1.855,0.3618,0.7487,False,Electricity systems in the limit of free solar photovoltaics and continent-scale transmission
-W2300549890,2016,67,1.8186,1.4683,2.754,False,Nighttime dissolution in a temperate coastal ocean ecosystem increases under acidification
-W4224529725,2022,9,1.7801,0.3255,0.6826,False,Contrasting climate and carbon-cycle consequences of fossil-fuel use versus deforestation disturbance
-W4311880140,2022,3,1.7442,0.4736,0.7806,False,Comment on “Climate consequences of hydrogen emissions” by Ocko and Hamburg (2022)
-W2076938378,2012,10,1.736,0.7054,1.0492,False,Temperature change vs. cumulative radiative forcing as metrics for evaluating climate consequences of energy system choices
-W4250644476,2013,48,1.2933,1.0306,1.3193,False,Rethinking wedges
-W4220806297,2022,14,1.2857,0.7657,0.8375,False,The quantity-quality transition in the value of expanding wind and solar power generation
-W3005563237,2020,25,1.2661,1.4512,2.3419,False,Climate effects of aerosols reduce economic inequality
-W2909251643,2019,25,1.2651,1.5,2.4853,False,Estimating Contributions of Sea Ice and Land Snow to Climate Feedback
-W2163571212,2012,135,1.1983,1.603,2.7507,False,"Greenhouse gases, climate change and the transition from coal to low-carbon electricity"
-W2552077768,2017,31,1.1479,1.8235,3.463,False,Reflecting on 50 years of geoengineering research
-W3082680388,2020,8,1.1309,0.8648,0.8708,False,Break-even year: a concept for understanding intergenerational trade-offs in climate change mitigation policy
-W4212946345,2022,40,1.0343,1.1106,1.2672,False,Exploring the role of electric vehicles in Africa's energy transition: A Nigerian case study
-W3159902348,2021,8,0.9116,1.2858,1.5607,False,Meteorology and Climatology of Historical Weekly Wind and Solar Power Resource Droughts over western North America in ERA5
-W2341585776,2016,18,0.783,1.6816,2.5832,False,Interannual stability of organic to inorganic carbon production on a coral atoll
-W4239079197,2019,8,0.7276,1.0693,0.8254,False,Climate System Response to Stratospheric Sulfate Aerosols:Sensitivity to Altitude of Aerosol Layer
+paper_id,publication_year,n_citations,mode_years,mode_ci_lo,mode_ci_hi,log_sd,logmean,peak_beyond_window,title
+W2093693868,2014,223,40.0,17.7612,inf,1.729,6.6784,True,Global and regional trends in greenhouse gas emissions from livestock
+W2619921079,2017,17,40.0,4.5822,inf,1.5257,6.0166,True,Will the use of a carbon tax for revenue generation produce an incentive to continue carbon emissions?
+W2068342401,2014,66,40.0,15.2582,inf,1.7606,6.7887,True,Natural climate variability and future climate policy
+W3015060218,2020,20,40.0,2.1241,inf,2.0193,7.7665,True,A Model‐Based Investigation of Terrestrial Plant Carbon Uptake Response to Four Radiation Modification Approaches
+W2020215002,2015,27,40.0,1.0306,inf,2.9735,12.5308,True,Atmospheric consequences of disruption of the ocean thermocline
+W2166051013,2014,44,40.0,4.3364,inf,2.3556,9.2378,True,Methods for attributing land-use emissions to products
+W1804140002,2011,60,34.5726,2.0497,inf,3.0,12.5431,True,Why is there a short-term increase in global precipitation in response to diminished CO<sub>2</sub>forcing?
+W2925259354,2019,73,14.5875,2.9787,inf,1.9126,6.3382,True,The impact of climate change on fertility*
+W1097101551,2015,122,13.1055,6.81,inf,1.0722,3.7226,True,Impacts of global warming on residential heating and cooling degree-days in the United States
+W2291098356,2016,386,11.0496,3.5333,inf,2.7222,9.8127,True,Reversal of ocean acidification enhances net coral reef calcification
+W2811133697,2018,2090,9.0484,7.0241,14.1911,1.0853,3.3804,False,Net-zero emissions energy systems
+W2029454019,2013,140,9.0117,5.7302,inf,1.1686,3.5641,True,Effect of Temperature on Photosynthesis and Growth in Marine Synechococcus spp.
+W3007956365,2020,28,8.7537,0.1817,inf,3.0,11.1695,True,Evaluating hypoxia alleviation through induced downwelling
+W4247620229,2021,38,8.1362,2.287,inf,1.3763,3.9905,True,Meteorology and climatology of historical weekly wind and solar power resource droughts over western North America in ERA5
+W2100674544,2011,111,7.998,4.8296,inf,1.3129,3.8029,True,Climate forcing and response to idealized changes in surface latent and sensible heat
+W3207640265,2021,259,7.9812,4.1246,inf,1.0201,3.1178,True,Geophysical constraints on the reliability of solar and wind power worldwide
+W1793424511,2012,41,7.4852,0.6294,inf,2.2323,6.9961,True,Geoengineering: Whiter skies?
+W2098840095,2012,165,7.2783,4.43,inf,1.4665,4.1355,True,Geophysical limits to global wind power
+W2076148053,2013,93,7.1421,3.8372,inf,1.4233,3.9919,True,Attributing the increase in atmospheric CO2 to emitters and absorbers
+W3047366598,2020,484,6.4499,4.2083,31.4738,1.1364,3.1555,False,Role of Long-Duration Energy Storage in Variable Renewable Electricity Systems
+W2110761353,2014,252,6.2081,4.903,10.8461,1.008,2.8419,False,Maximum warming occurs about one decade after a carbon dioxide emission
+W2046376516,2011,183,6.1188,5.0811,7.9186,0.8379,2.5134,False,Dependence of climate forcing and response on the altitude of black carbon aerosols
+W3089422816,2020,35,5.9233,2.8415,inf,0.9929,2.7648,True,Climate effects of China’s efforts to improve its air quality
+W1845614755,2015,143,5.6014,4.2989,12.1569,0.9304,2.5886,False,Climate benefits of natural gas as a bridge fuel and potential delay of near-zero energy systems
+W3115812060,2020,18,5.3469,3.7535,inf,0.4533,1.882,True,Climate More Responsive to Marine Cloud Brightening Than Ocean Albedo Modification: A Model Study
+W2044269414,2011,459,5.3379,4.6959,6.1431,0.9062,2.496,False,The supply chain of CO <sub>2</sub> emissions
+W2983830329,2019,29,5.1747,2.7954,inf,0.9153,2.4816,True,Photo-movement in the sea anemone Aiptasia influenced by light quality and symbiotic association
+W1703230271,2011,53,5.1746,3.0973,20.1186,0.9795,2.6031,False,The frequency response of temperature and precipitation in a climate model
+W3137223864,2021,23,5.0393,0.6115,inf,1.6543,4.3541,True,Unexpected role of communities colonizing dead coral substrate in the calcification of coral reefs
+W2143872408,2013,37,5.0358,0.5631,inf,1.7041,4.5205,True,Climate response to imposed solar radiation reductions in high latitudes
+W2155214415,2013,53,4.8308,2.7441,inf,1.0592,2.6969,True,Nitrogen deposition: how important is it for global terrestrial carbon uptake?
+W2788184393,2018,308,4.7412,3.3279,17.0523,1.3056,3.261,False,Geophysical constraints on the reliability of solar and wind power in the United States
+W2508189370,2016,22,4.6965,3.0689,inf,0.6221,1.9338,True,Greenhouse Gas Emissions Due to Meat Production in the Last Fifty Years
+W2162096236,2012,14,4.5798,0.4353,inf,0.7946,2.153,True,Avoiding mangrove destruction by avoiding carbon dioxide emissions
+W2529760069,2016,12,4.5761,0.4807,inf,0.8235,2.199,True,Adapting to rates versus amounts of climate change: a case of adaptation to sea-level rise
+W2092072317,2013,111,4.3561,3.1132,7.1025,1.0239,2.52,False,Projections of the pace of warming following an abrupt increase in atmospheric carbon dioxide concentration
+W3094610577,2020,15,4.3427,0.3285,inf,1.3425,3.2707,True,Climate change as an incentive for future human migration
+W2885862515,2018,140,4.2592,3.5906,5.9657,0.6799,1.9114,False,Divergent global-scale temperature effects from identical aerosols emitted in different regions
+W3175494581,2021,36,4.2407,1.8153,inf,1.2084,2.9051,True,Spatial constraints in large-scale expansion of wind power plants
+W2178889352,2015,99,4.2105,2.3242,inf,1.4133,3.4351,True,Long-term response of oceans to CO2 removal from the atmosphere
+W2158006323,2015,102,4.1223,3.3885,5.0563,0.6926,1.8961,False,Coral reef metabolism and carbon chemistry dynamics of a coral reef flat
+W2889872645,2018,791,4.083,3.6222,4.8574,0.9066,2.2288,False,Country-level social cost of carbon
+W2907417922,2018,33,4.0629,3.3343,5.3883,0.4359,1.5919,False,Reduced emissions through climate damage to the economy
+W2045662683,2015,43,4.0423,0.228,inf,2.976,10.2536,True,Atmospheric impacts of sea ice decline in CO2 induced global warming
+W1964220360,2011,48,4.0392,2.9283,5.0773,0.6674,1.8415,False,Coupled climate–carbon simulations indicate minor global effects of wars and epidemics on atmospheric CO <sub>2</sub> between <scp>ad</scp> 800 and 1850
+W2119534125,2013,120,4.033,2.8772,6.0801,1.0437,2.4838,False,Strategic incentives for climate geoengineering coalitions to exclude broad participation
+W2898401736,2018,35,3.9415,2.0745,inf,1.0206,2.4131,True,Comparison of the Fast and Slow Climate Response to Three Radiation Management Geoengineering Schemes
+W2887947886,2018,67,3.8053,3.1607,4.9968,0.5679,1.6589,False,The efficacy of aerosol–cloud radiative perturbations from near-surface emissions in deep open-cell stratocumuli
+W2925057469,2019,11,3.7929,2.7953,9.5962,0.3412,1.4495,False,Author Correction: Country-level social cost of carbon
+W2068047583,2014,77,3.7668,3.0092,4.5309,0.6572,1.7581,False,Modeling of solar radiation management: a comparison of simulations using reduced solar constant and stratospheric sulphate aerosols
+W2955480378,2019,739,3.6534,3.1321,4.686,1.0236,2.3433,False,Committed emissions from existing energy infrastructure jeopardize 1.5 °C climate target
+W3011155179,2020,24,3.6415,1.3335,inf,1.1368,2.5846,True,Responses of sea urchin larvae to field and laboratory acidification
+W2103002650,2012,110,3.5901,2.758,4.413,0.8225,1.9546,False,Management of trade-offs in geoengineering through optimal choice of non-uniform radiative forcing
+W2100491050,2014,17,3.5698,0.3548,inf,0.8732,2.0349,True,Estimating the Contribution of Sea Ice Response to Climate Sensitivity in a Climate Model
+W2911927510,2019,4,3.5548,0.419,inf,0.3205,1.371,True,Carbon Isotopic Fractionation in Organic Matter Production Consistent With Benthic Community Composition Across a Coral Reef Flat
+W2762861826,2017,67,3.4367,2.4852,5.9527,0.8317,1.9262,False,Geophysical potential for wind energy over the open oceans
+W2885213158,2018,58,3.4295,2.7933,4.3473,0.5709,1.5584,False,Global and Arctic climate sensitivity enhanced by changes in North Pacific heat flux
+W2016607514,2014,88,3.2915,1.9543,6.1325,1.1508,2.5157,False,Solar geoengineering to limit the rate of temperature change
+W2142213164,2014,80,3.281,1.8505,6.7826,1.16,2.5338,False,CH <sub>4</sub> and N <sub>2</sub> O emissions embodied in international trade of meat
+W2945001263,2019,36,3.2463,2.0602,inf,0.8255,1.8589,True,Climate system response to stratospheric sulfate aerosols: sensitivity to altitude of aerosol layer
+W2772896719,2017,323,3.2287,2.8996,3.5874,0.7051,1.6692,False,Greater future global warming inferred from Earth’s recent energy budget
+W1993208092,2015,29,3.1748,0.1861,inf,1.6906,4.0135,True,Impacts of ocean albedo alteration on Arctic sea ice restoration and Northern Hemisphere climate
+W1905430927,2013,320,3.1681,2.2404,4.544,1.4618,3.2901,False,Climate model response from the Geoengineering Model Intercomparison Project (GeoMIP)
+W2041362028,2011,52,3.151,2.2507,3.9606,0.6968,1.6332,False,Can we test geoengineering?
+W3011998440,2019,132,3.1413,2.5501,4.528,0.7996,1.784,False,The Ocean as a Solution to Climate Change: Five Opportunities for Action
+W2999702683,2020,15,3.067,0.1143,inf,1.4476,3.2163,True,The Climatic Effects of Hygroscopic Growth of Sulfate Aerosols in the Stratosphere
+W2316420616,2016,36,3.0525,2.0764,4.0712,0.6685,1.5629,False,Why must a solar forcing be larger than a CO <sub>2</sub> forcing to cause the same global mean surface temperature change?
+W2614248593,2017,46,2.9904,1.9837,4.754,0.7927,1.7237,False,Evaluating relative benefits of different types of R&amp;D for clean energy technologies
+W2056736723,2014,46,2.9111,2.0973,3.6474,0.6584,1.502,False,"Community calcification in Lizard Island, Great Barrier Reef: A 33 year perspective"
+W2126237691,2012,81,2.9078,1.928,3.8284,0.9197,1.9133,False,Carbon turnover rates in the One Tree Island reef: A 40‐year perspective
+W2885645393,2018,85,2.9044,2.3066,3.6924,0.7177,1.5813,False,Expected limits on the ocean acidification buffering potential of a temperate seagrass meadow
+W3086306797,2020,21,2.8898,2.1899,4.5043,0.4472,1.2612,False,Would firm generators facilitate or deter variable renewable energy in a carbon-free electricity system?
+W2172949346,2015,27,2.8774,0.9831,7.9106,0.9098,1.8846,False,Fast and slow climate responses to CO<sub>2</sub> and solar forcing: A linear multivariate regression model characterizing transient climate change
+W2739200690,2017,49,2.8579,1.8079,4.8898,0.8618,1.7928,False,Simultaneous stabilization of global temperature and precipitation through cocktail geoengineering
+W2165473104,2012,118,2.7586,1.7241,3.7892,1.1302,2.292,False,Climate response to changes in atmospheric carbon dioxide and solar irradiance on the time scale of days to weeks
+W2965418441,2019,22,2.7544,2.1392,3.3456,0.4138,1.1845,False,Climate Response to Pulse Versus Sustained Stratospheric Aerosol Forcing
+W3043660579,2020,16,2.731,1.3442,inf,0.689,1.4795,True,A 32-million year cycle detected in sea-level fluctuations over the last 545 Myr
+W3205902264,2021,3,2.7273,1.8999,3.6782,0.1588,1.0285,False,Portfolios all the way down …
+W2783110481,2018,33,2.707,0.1722,inf,1.9841,4.9326,True,Widespread persistent changes to temperature extremes occurred earlier than predicted
+W2559815628,2016,6,2.6388,0.0065,inf,0.9929,1.9561,True,Spatial Distribution of Generation of Lorenz’s Available Potential Energy in a Global Climate Model
+W1990486347,2012,133,2.6316,2.0186,3.2027,0.8529,1.6949,False,A short-term in situ CO2 enrichment experiment on Heron Island (GBR)
+W1995346451,2013,4,2.5644,0.0014,inf,0.8847,1.7245,True,Prudence on solar climate engineering
+W2164573249,2012,86,2.5573,0.3542,23.3903,3.0,9.939,False,Ecosystem Impacts of Geoengineering: A Review for Developing a Science Plan
+W4213267136,2022,96,2.5551,1.5879,inf,1.139,2.2355,True,Stylized least-cost analysis of flexible nuclear power in deeply decarbonized electricity systems considering wind and solar resources worldwide
+W2090023600,2013,18,2.5487,0.8239,4.0134,0.7913,1.5618,False,Climate response due to carbonaceous aerosols and aerosol-induced SST effects in NCAR community atmospheric model CAM3.5
+W2898101520,2018,38,2.5485,1.6032,4.0349,0.7717,1.5311,False,Assumptions for emergent constraints
+W2975412290,2019,44,2.5339,1.7002,4.6587,0.7806,1.5391,False,Living coral tissue slows skeletal dissolution related to ocean acidification
+W3005963286,2020,8,2.5245,0.1423,inf,0.6234,1.3146,True,Empirical Prediction of Short‐Term Annual Global Temperature Variability
+W2178610508,2015,135,2.5221,1.8817,3.153,0.9352,1.7997,False,Combustion of available fossil fuel resources sufficient to eliminate the Antarctic Ice Sheet
+W1594164258,2015,62,2.4799,1.6785,3.2251,0.814,1.5708,False,Six Month In Situ High-Resolution Carbonate Chemistry and Temperature Study on a Coral Reef Flat Reveals Asynchronous pH and Temperature Anomalies
+W3081397028,2020,57,2.4676,1.6341,14.1032,0.9238,1.7567,False,Effects of Deep Reductions in Energy Storage Costs on Highly Reliable Wind and Solar Electricity Systems
+W1965663041,2013,85,2.4487,1.6907,3.144,0.8763,1.6635,False,Risks to coral reefs from ocean carbonate chemistry changes in recent earth system model projections
+W2522765912,2016,101,2.4481,1.6366,3.3617,1.0226,1.9411,False,Dependence of global radiative feedbacks on evolving patterns of surface heat fluxes
+W4293259853,2022,12,2.4317,1.6819,inf,0.4339,1.0768,True,Idealized analysis of relative values of bidirectional versus unidirectional electric vehicle charging in deeply decarbonized electricity systems
+W2516452788,2016,28,2.3765,0.4943,8.7446,0.9969,1.8594,False,"Quantifying expert consensus against the existence of a secret, large-scale atmospheric spraying program"
+W3028615387,2020,69,2.3546,1.4901,22.4357,1.0591,1.9781,False,Developing reliable hourly electricity demand data through screening and imputation
+W3175390284,2021,90,2.344,1.8151,4.3779,0.7995,1.4911,False,Opportunities for flexible electricity loads such as hydrogen production from curtailed generation
+W2723344177,2017,341,2.3207,2.001,2.6417,0.8723,1.6028,False,"Evaluation of a proposal for reliable low-cost grid power with 100% wind, water, and solar"
+W2027334164,2012,46,2.2876,0.1786,13.5082,1.5299,3.1679,False,Attribution of atmospheric CO <sub>2</sub> and temperature increases to regions: importance of preindustrial land use change
+W4281751737,2022,33,2.2484,1.0365,inf,1.1333,2.0947,True,Guiding the deployment of electric vehicles in the developing world
+W2010698719,2011,9,2.237,0.6839,3.5034,0.6412,1.2163,False,Comment on “Atmospheric <i>P</i> <scp>co</scp> <sub>2</sub> Perturbations Associated with the Central Atlantic Magmatic Province”
+W2783159541,2018,124,2.1783,1.4688,3.2668,1.1279,2.0507,False,Taking the metabolic pulse of the world’s coral reefs
+W2289721959,2016,14,2.1765,1.2537,2.9417,0.5399,1.0693,False,Simulated long‐term climate response to idealized solar geoengineering
+W2969843139,2019,17,2.1645,0.1606,inf,0.9463,1.6677,True,Induced Energy-Saving Efficiency Improvements Amplify Effectiveness of Climate Change Mitigation
+W3096279129,2020,37,2.0932,1.5473,2.6899,0.5918,1.0889,False,Atmospheric pressure gradients and Coriolis forces provide geophysical limits to power density of large wind farms
+W2787701140,2018,30,1.9478,0.1203,inf,1.4998,2.9161,True,Does shortwave absorption by methane influence its effectiveness?
+W2094132477,2012,130,1.9073,0.3703,9.7893,2.6333,7.5799,False,Crop yields in a geoengineered climate
+W2792232334,2018,162,1.9027,1.1737,3.0519,1.3576,2.4863,False,Carbon dioxide addition to coral reef waters suppresses net community calcification
+W4214901850,2022,119,1.8739,1.1844,inf,1.2905,2.2935,True,The role of concentrated solar power with thermal energy storage in least-cost highly reliable electricity systems fully powered by variable renewable energy
+W4220772083,2022,6,1.855,0.9263,inf,0.3618,0.7487,True,Electricity systems in the limit of free solar photovoltaics and continent-scale transmission
+W2300549890,2016,67,1.8186,0.3089,5.7437,1.4683,2.754,False,Nighttime dissolution in a temperate coastal ocean ecosystem increases under acidification
+W4224529725,2022,9,1.7801,1.2548,2.3279,0.3255,0.6826,False,Contrasting climate and carbon-cycle consequences of fossil-fuel use versus deforestation disturbance
+W4311880140,2022,3,1.7442,0.003,inf,0.4736,0.7806,True,Comment on “Climate consequences of hydrogen emissions” by Ocko and Hamburg (2022)
+W2076938378,2012,10,1.736,0.4742,2.8068,0.7054,1.0492,False,Temperature change vs. cumulative radiative forcing as metrics for evaluating climate consequences of energy system choices
+W4250644476,2013,48,1.2933,0.5675,1.9655,1.0306,1.3193,False,Rethinking wedges
+W4220806297,2022,14,1.2857,0.1502,inf,0.7657,0.8375,True,The quantity-quality transition in the value of expanding wind and solar power generation
+W3005563237,2020,25,1.2661,0.0501,inf,1.4512,2.3419,True,Climate effects of aerosols reduce economic inequality
+W2909251643,2019,25,1.2651,0.0415,inf,1.5,2.4853,True,Estimating Contributions of Sea Ice and Land Snow to Climate Feedback
+W2163571212,2012,135,1.1983,0.3379,2.0231,1.603,2.7507,False,"Greenhouse gases, climate change and the transition from coal to low-carbon electricity"
+W2552077768,2017,31,1.1479,0.04,17.4623,1.8235,3.463,False,Reflecting on 50 years of geoengineering research
+W3082680388,2020,8,1.1309,0.0055,27.1553,0.8648,0.8708,False,Break-even year: a concept for understanding intergenerational trade-offs in climate change mitigation policy
+W4212946345,2022,40,1.0343,0.3081,6.9305,1.1106,1.2672,False,Exploring the role of electric vehicles in Africa's energy transition: A Nigerian case study
+W3159902348,2021,8,0.9116,0.0028,inf,1.2858,1.5607,True,Meteorology and Climatology of Historical Weekly Wind and Solar Power Resource Droughts over western North America in ERA5
+W2341585776,2016,18,0.783,0.008,8.6135,1.6816,2.5832,False,Interannual stability of organic to inorganic carbon production on a coral atoll
+W4239079197,2019,8,0.7276,0.0014,3.2436,1.0693,0.8254,False,Climate System Response to Stratospheric Sulfate Aerosols:Sensitivity to Altitude of Aerosol Layer

@@ -22,20 +22,27 @@ def run_lognormal(args, author, works):
         "Mode = peak citation age (yr); LogSD = sigma of ln(age)."
     )
     print("  Skipped: papers with <3 in-window citations or all in one year.")
-    print("  * = peak beyond observed window (still rising; mode is a lower bound).")
+    print("  CI = 95% profile-likelihood interval on the peak; 'inf' = still rising")
+    print("  (peak timing unbounded above); * marks those papers.")
+
+    def fmt_ci(lo, hi):
+        hi_s = "inf" if hi == float("inf") else f"{hi:.1f}"
+        return f"{lo:.1f}-{hi_s}"
 
     header = (
-        f"  {'Paper ID':<13} {'Pub':>4} {'Cites':>5} {'Mode':>7} {'LogSD':>6}  Title"
+        f"  {'Paper ID':<13} {'Pub':>4} {'Cites':>5} {'Mode':>7} {'LogSD':>6} "
+        f"{'95% CI (yr)':>13}  Title"
     )
     print()
     print(header)
-    print(f"  {'-' * 13} {'-' * 4} {'-' * 5} {'-' * 7} {'-' * 6}  {'-' * 5}")
+    print(f"  {'-' * 13} {'-' * 4} {'-' * 5} {'-' * 7} {'-' * 6} {'-' * 13}  {'-' * 5}")
     for r in rows:
-        title = (r["title"] or "")[:58]
+        title = (r["title"] or "")[:48]
         mode = f"{r['mode']:.2f}" + ("*" if r["peak_beyond_window"] else "")
+        ci = fmt_ci(r["mode_ci_lo"], r["mode_ci_hi"])
         print(
             f"  {r['id']:<13} {r['publication_year']:>4} {r['n_citations']:>5} "
-            f"{mode:>7} {r['log_sd']:>6.2f}  {title}"
+            f"{mode:>7} {r['log_sd']:>6.2f} {ci:>13}  {title}"
         )
 
     csv_path = args.csv or f"lognormal_{author['id']}.csv"
@@ -43,13 +50,16 @@ def run_lognormal(args, author, works):
         writer = csv.writer(f)
         writer.writerow([
             "paper_id", "publication_year", "n_citations",
-            "mode_years", "log_sd", "logmean", "peak_beyond_window", "title",
+            "mode_years", "mode_ci_lo", "mode_ci_hi",
+            "log_sd", "logmean", "peak_beyond_window", "title",
         ])
         for r in rows:
+            ci_hi = "inf" if r["mode_ci_hi"] == float("inf") else round(r["mode_ci_hi"], 4)
             writer.writerow([
                 r["id"], r["publication_year"], r["n_citations"],
-                round(r["mode"], 4), round(r["log_sd"], 4),
-                round(r["logmean"], 4), r["peak_beyond_window"], r["title"] or "",
+                round(r["mode"], 4), round(r["mode_ci_lo"], 4), ci_hi,
+                round(r["log_sd"], 4), round(r["logmean"], 4),
+                r["peak_beyond_window"], r["title"] or "",
             ])
     print(f"\nWrote {len(rows)} rows to {csv_path}")
 

@@ -94,10 +94,15 @@ How it works:
   fit would have for younger papers whose right tail extends beyond the observation window.
   Implemented in pure Python (normal CDF via `math.erf`, Nelder-Mead optimizer); no SciPy
   or NumPy dependency.
-- **`peak_beyond_window` flag (`*`)**: when citations are still rising at the truncation
-  boundary the truncated fit is non-identifiable; the search is boxed to a plausible region
-  and such papers are flagged. For them the reported mode is a **lower bound**, not a
-  reliable point estimate.
+- **Confidence interval on the peak timing**: a 95% **profile-likelihood** interval for the
+  mode (`mode_ci_lo`, `mode_ci_hi`) is reported for every paper. This stays informative even
+  when the point estimate is non-identifiable: for a paper still rising at the truncation
+  boundary it yields a finite lower bound with an unbounded upper bound (`mode_ci_hi = inf`,
+  i.e. "the peak is at least `mode_ci_lo` years out, 95% confidence"); for a paper that has
+  peaked within the window it yields a normal two-sided interval.
+- **`peak_beyond_window` flag (`*`)**: True when `mode_ci_hi` is unbounded (no finite upper
+  confidence limit on the peak). For these papers the mode point estimate is only a **lower
+  bound**; the search is boxed to a plausible region to keep it finite.
 - **Skipped**: papers with fewer than 3 in-window citations, all in-window citations in a
   single year, or a degenerate fit.
 
@@ -107,13 +112,14 @@ Example output:
 Log-normal citation-age fit (right-truncated MLE): 125 papers published 2011–2022, citations through 2025
   Citation age = (citing_year - pub_year) + 0.5 yr. Mode = peak citation age (yr); LogSD = sigma of ln(age).
   Skipped: papers with <3 in-window citations or all in one year.
-  * = peak beyond observed window (still rising; mode is a lower bound).
+  CI = 95% profile-likelihood interval on the peak; 'inf' = still rising
+  (peak timing unbounded above); * marks those papers.
 
-  Paper ID       Pub Cites    Mode  LogSD  Title
-  ------------- ---- ----- ------- ------  -----
-  W2093693868   2014   223  40.00*   1.73  Global and regional trends in greenhouse gas emissions fro
+  Paper ID       Pub Cites    Mode  LogSD   95% CI (yr)  Title
+  ------------- ---- ----- ------- ------ -------------  -----
+  W2093693868   2014   223  40.00*   1.73      17.8-inf  Global and regional trends in greenhouse gas emi
   ...
-  W2029454019   2013   140    9.01   1.17  Effect of Temperature on Photosynthesis and Growth in Mari
+  W2811133697   2018  2090    9.05   1.09       7.0-14.2  Net-zero emissions energy systems
   ...
 ```
 

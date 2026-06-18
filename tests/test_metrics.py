@@ -163,21 +163,28 @@ def test_lognormal_flags_peak_beyond_window():
         first_year=2011, last_year=2022, truncation_year=2023,
     )
     assert len(rows) == 1
-    assert rows[0]["peak_beyond_window"] is True
-    # and the fit stays finite (boxed), not a runaway value
-    assert rows[0]["mode"] <= 40.0
-    assert rows[0]["log_sd"] <= 3.0
+    r = rows[0]
+    assert r["peak_beyond_window"] is True
+    # the fit stays finite (boxed), not a runaway value
+    assert r["mode"] <= 40.0
+    assert r["log_sd"] <= 3.0
+    # the CI still gives a finite lower bound but an unbounded upper bound
+    assert r["mode_ci_hi"] == float("inf")
+    assert 0.0 < r["mode_ci_lo"] < r["mode"]
 
 
 def test_lognormal_within_window_not_flagged():
-    # clear peak well inside the window -> not flagged
+    # clear peak well inside the window -> not flagged, finite two-sided CI
     cby = {2012: 1, 2013: 3, 2014: 6, 2015: 4, 2016: 2, 2017: 1}
     rows = compute_citation_lognormal(
         [_work("W1", 2012, cby)],
         first_year=2011, last_year=2022, truncation_year=2025,
     )
     assert len(rows) == 1
-    assert rows[0]["peak_beyond_window"] is False
+    r = rows[0]
+    assert r["peak_beyond_window"] is False
+    assert math.isfinite(r["mode_ci_hi"])
+    assert r["mode_ci_lo"] < r["mode"] < r["mode_ci_hi"]
 
 
 def test_lognormal_publication_year_filter():

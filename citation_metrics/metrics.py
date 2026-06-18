@@ -129,6 +129,81 @@ def _nelder_mead(f, x0, step=0.3, tol=1e-10, max_iter=2000):
     return simplex[best]
 
 
+# 95% confidence: a profile log-likelihood drop of chi2(1, 0.95) / 2.
+_CI_DELTA = 1.9207
+
+
+def _golden_section_min(f, a, b, iters=50):
+    """Minimize a unimodal 1-D function on [a, b] by golden-section search."""
+    gr = (math.sqrt(5.0) - 1.0) / 2.0
+    c = b - gr * (b - a)
+    d = a + gr * (b - a)
+    fc, fd = f(c), f(d)
+    for _ in range(iters):
+        if fc < fd:
+            b, d, fd = d, c, fc
+            c = b - gr * (b - a)
+            fc = f(c)
+        else:
+            a, c, fc = c, d, fd
+            d = a + gr * (b - a)
+            fd = f(d)
+    return 0.5 * (a + b)
+
+
+def _profile_nll_at_logmode(logmode, samples, trunc_age):
+    """Negative log-likelihood profiled over sigma at a fixed log-mode.
+
+    The mode of a log-normal is exp(mu - sigma^2), so fixing log-mode = mu - sigma^2
+    and minimizing over sigma traces the profile likelihood of the peak timing.
+    """
+    def f(s):
+        sigma = math.exp(s)
+        mu = logmode + sigma * sigma
+        return _truncated_lognormal_neg_ll([mu, s], samples, trunc_age)
+
+    s_star = _golden_section_min(f, math.log(_SIGMA_MIN), math.log(_SIGMA_MAX))
+    return f(s_star)
+
+
+def _mode_confidence_interval(logmode_hat, samples, trunc_age, delta=_CI_DELTA):
+    """Profile-likelihood confidence interval for the mode (peak citation age).
+
+    Returns (mode_lo, mode_hi) in years. mode_hi is +inf when the upper bound is
+    unbounded (citations still rising at the truncation boundary, so the peak
+    timing has no finite upper confidence limit).
+    """
+    log_cap = math.log(_MODE_CAP)
+    logmode_hat = min(logmode_hat, log_cap)
+    pnll = lambda lm: _profile_nll_at_logmode(lm, samples, trunc_age)
+    target = pnll(logmode_hat) + delta
+
+    def crossing(direction):
+        limit = log_cap if direction > 0 else logmode_hat - 14.0
+        step = 0.25 * direction
+        x_in = logmode_hat
+        x = logmode_hat + step
+        while (direction > 0 and x <= log_cap) or (direction < 0 and x >= limit):
+            if pnll(x) >= target:
+                a, b = x_in, x          # bracketed; bisect to the crossing
+                for _ in range(50):
+                    m = 0.5 * (a + b)
+                    if pnll(m) >= target:
+                        b = m
+                    else:
+                        a = m
+                return 0.5 * (a + b)
+            x_in = x
+            x += step
+        return None
+
+    lo_lm = crossing(-1)
+    hi_lm = None if logmode_hat >= log_cap - 1e-6 else crossing(+1)
+    mode_lo = math.exp(lo_lm) if lo_lm is not None else 0.0
+    mode_hi = math.exp(hi_lm) if hi_lm is not None else float("inf")
+    return mode_lo, mode_hi
+
+
 def compute_citation_lognormal(works, first_year=2011, last_year=2022,
                                truncation_year=2025):
     """Fit a right-truncated log-normal to each paper's citation-age distribution.
@@ -154,15 +229,19 @@ def compute_citation_lognormal(works, first_year=2011, last_year=2022,
 
     Reported per paper:
         mode   = exp(mu - sigma^2)   # most-likely citation age, in years
+        mode_ci_lo, mode_ci_hi       # 95% profile-likelihood CI on the mode
+                                     # (peak timing); mode_ci_hi is +inf when
+                                     # the upper bound is unbounded
         log_sd = sigma               # shape parameter (std of ln age)
         logmean = mu
-        peak_beyond_window           # True if the estimated peak is past the
-                                     # last observed age (still rising; the
-                                     # mode is a lower bound, not identifiable)
+        peak_beyond_window           # True when mode_ci_hi is unbounded (the
+                                     # peak timing has no finite upper CI)
 
     When citations are still rising at the truncation boundary the truncated
     likelihood is non-identifiable; the fit is boxed to a plausible region and
-    such papers are flagged via peak_beyond_window.
+    the mode point estimate becomes a lower bound. The confidence interval
+    remains informative even then: it reports a finite lower bound on the peak
+    timing with an unbounded (+inf) upper bound.
 
     Papers with fewer than 3 in-window citations, with all in-window citations
     in a single year, or whose ages collapse to a single value are skipped.
@@ -213,6 +292,9 @@ def compute_citation_lognormal(works, first_year=2011, last_year=2022,
         )
         sigma = math.exp(s)
         mode = math.exp(mu - sigma ** 2)
+        mode_ci_lo, mode_ci_hi = _mode_confidence_interval(
+            mu - sigma ** 2, samples, trunc_age
+        )
 
         rows.append({
             "id": w["id"],
@@ -220,11 +302,13 @@ def compute_citation_lognormal(works, first_year=2011, last_year=2022,
             "publication_year": y,
             "n_citations": total,
             "mode": mode,
+            "mode_ci_lo": mode_ci_lo,
+            "mode_ci_hi": mode_ci_hi,
             "log_sd": sigma,
             "logmean": mu,
-            # peak estimated past the last observed age -> still rising; the
-            # mode is not really identifiable and should be read as a lower bound
-            "peak_beyond_window": mode > trunc_age,
+            # no finite upper confidence bound on the peak timing -> citations
+            # still rising; the mode point estimate is only a lower bound
+            "peak_beyond_window": math.isinf(mode_ci_hi),
         })
 
     rows.sort(key=lambda r: r["mode"], reverse=True)
